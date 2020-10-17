@@ -135,7 +135,7 @@
       width="50%"
       @close="editDialogClosed"
     >
-      <!-- 内容主题区域 -->
+      <!-- 内容主体区域 -->
 
       <el-form
         ref="editFormRef"
@@ -278,13 +278,13 @@ export default {
     editDialogClosed() {
       this.$refs.editFormRef.resetFields();
     },
+    //显示修改对话框并查询数据
     async showEditDialog(id) {
       const { data: res } = await this.$http.get("roles/" + id);
       if (res.meta.status !== 200) {
         return this.$message.error("查询角色信息失败！");
       }
       this.editForm = res.data;
-
       this.editDialogVisible = true;
     },
 
@@ -317,7 +317,7 @@ export default {
     async removeRoleById(id) {
       //弹框询问用户是否删除数据
       const confirmResult = await this.$confirm(
-        "此操作将永久删除该用户，是否继续？",
+        "此操作将删除该权限，是否继续？",
         "提示",
         {
           confirmButtonText: "确定",
@@ -395,20 +395,23 @@ export default {
     },
 
     //点击为角色分配权限
-  async allotRights() {
+    async allotRights() {
       const keys = [
         ...this.$refs.treeRef.getCheckedKeys(),
         this.$refs.treeRef.getHalfCheckedNodes(),
       ];
       const idStr = keys.join(",");
 
-    const {data:res} = await this.$http.post(`roles/${this.roleId}/rights`, { rids: idStr });
-    if(res.meta.status!== 200){
-        return this.$message.error('分配权限失败！')
-    }
-    this.$message.success('分配权限成功！')
-    this.getRolesList();
-    this.setRightDialogVisible = false;
+      const { data: res } = await this.$http.post(
+        `roles/${this.roleId}/rights`,
+        { rids: idStr }
+      );
+      if (res.meta.status !== 200) {
+        return this.$message.error("分配权限失败！");
+      }
+      this.$message.success("分配权限成功！");
+      this.getRolesList();
+      this.setRightDialogVisible = false;
     },
   },
 };
