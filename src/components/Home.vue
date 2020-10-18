@@ -124,6 +124,8 @@ export default {
     align-items: center;
     span {
       margin-left: 15px;
+      font-weight: bold;
+      font-size: 18px;
     }
     img {
       height: 70%;
